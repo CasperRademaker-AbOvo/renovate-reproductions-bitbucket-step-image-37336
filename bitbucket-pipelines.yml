@@ -1,0 +1,15 @@
+image: node:24.4.1
+
+definitions:
+  steps:
+    - step: &check-license-attribution
+        image: node:24.4.1 # Uses git, so needs the non-alpine variant
+        name: Check if license attribution is up to date
+        script:
+          - npx generate-attribution
+          - git diff HEAD --exit-code ./oss-attribution 
+
+pipelines:
+  branches:
+    '{main}':
+      - step: *check-license-attribution
